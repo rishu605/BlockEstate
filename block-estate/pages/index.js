@@ -37,10 +37,10 @@ export default function Home() {
           <h1>Welcome to BlockEstate</h1>
           <p>Your trusted platform for finding and listing properties.</p>
           <div className={styles.ctas}>
-            <a className={styles.primary} href="/list-property">
+            <a className={styles.primary} href="/list">
               List Your Property
             </a>
-            <a href="/listed-properties" className={styles.secondary}>
+            <a href="/listings" className={styles.secondary}>
               View Listed Properties
             </a>
           </div>

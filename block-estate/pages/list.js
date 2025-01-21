@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { sendJsonToIpfs } from '@/utils/pinata';
 
 const validationSchema = Yup.object({
     askingPrice: Yup.number().required('Required'),
@@ -47,8 +48,10 @@ export default function List() {
                     sellerPhone: ''
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, { setSubmitting }) => {
+                onSubmit={async (values, { setSubmitting }) => {
                     console.log(values);
+                    const response = await sendJsonToIpfs(values)
+                    console.log("Response: ", response);
                     setSubmitting(false);
                 }}
             >
