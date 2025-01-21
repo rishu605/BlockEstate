@@ -32,7 +32,7 @@ export default function Header() {
                             <a className="nav-link" href="/list">List My Property</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Listed</a>
+                            <a className="nav-link" href="/listings">Listed</a>
                         </li>
                     </ul>
                 </div>

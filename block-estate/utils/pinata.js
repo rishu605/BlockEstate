@@ -1,4 +1,4 @@
-import { apiKey, apiSecret, gatewayJwt, ipfsGateway, sendJsonHeader } from "@/config";
+import { apiKey, apiSecret, gatewayJwt, getHeader, ipfsGateway, sendJsonHeader } from "@/config";
 import axios from "axios";
 
 
@@ -30,7 +30,8 @@ const sendJsonToIpfs = async (jsonData) => {
             "propertyInfo": {
                 ...jsonData,
                 date,
-                time
+                time,
+                propertyPictures: fileHashes
             }
         }
     })
@@ -61,6 +62,7 @@ const sendFileToIpfs = async (file) => {
     }
 
     const sendPicture = await axios.post(apiUrl, formData, opts)
+    console.log("sendPicture: ", sendPicture)
     return sendPicture.data.IpfsHash
 }
 
@@ -81,6 +83,23 @@ const getImageFromPinata = async (cid) => {
     }
 };
 
+const getPinListFromIpfs = async () => {
+    const queryFilter = "metadata=[name]=listData"
+    const apiUrl = "https://api.pinata.cloud/data/pinList?" + queryFilter
+    const resData = await axios.get(apiUrl, getHeader)
+    const pinList = resData.data.rows.map(row => row.ipfs_pin_hash)
+    return pinList
+}
+
+const getDataForCids = async (cids) => {
+    const dataPromises = cids.map(cid => getImageFromPinata(cid));
+    const results = await Promise.allSettled(dataPromises);
+    return results.map(result => result.status === 'fulfilled' ? result.value : null);
+};
+
 export {
-    sendJsonToIpfs
+    sendJsonToIpfs,
+    getImageFromPinata,
+    getPinListFromIpfs,
+    getDataForCids
 }
